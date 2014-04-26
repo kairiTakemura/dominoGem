@@ -1,4 +1,4 @@
-require "./domino/version"
+#require "domino/version"
 require 'rubygems'
 require 'RMagick'
 
@@ -11,7 +11,13 @@ module Domino
     img.write("#{fname}_decreasedpi.jpg")
     end
   end
+  def self.count
+    img = Magick::Image.read( ARGV[0] ).first #firstは配列の[0]
+    for x in 0..img.rows do
+      puts "#{img.pixel_color(x,0)}"
+    end
+  end
 end
 
-Domino.decreasedpi
+Domino.count
 
