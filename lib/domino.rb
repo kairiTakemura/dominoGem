@@ -75,5 +75,5 @@ module Domino
   end
 end
 
-Domino.decreasedpi
-#Domino.count
+#Domino.decreasedpi
+Domino.count
