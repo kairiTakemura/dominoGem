@@ -4,12 +4,25 @@ require 'RMagick'
 
 
 module Domino
+
+  DOMINO_BLACK = Magick::Pixel.new(45*256,47*256,63*256)
+  =begin
+  domino_white = Magick::Pixel.new(195*256,226*256,252*256)
+  domino_red = Magick::Pixel.new(228*256,99*256,111*256)
+  domino_blue = Magick::Pixel.new(9*256,117*256,197*256)
+  domino_yellow = Magick::Pixel.new(239*256,216*256,145*256)
+  domino_green = Magick::Pixel.new(81*256,196*256,149*256)
+  domino_orange = Magick::Pixel.new(254*256,141*256,97*256)
+  domino_pink = Magick::Pixel.new(232*256,160*256,212*256)
+  domino_violet = Magick::Pixel.new(82*256,6*256,85*256)
+  =end
+
   def self.decreasedpi
     for fname in ARGV do
-    img = Magick::Image.read( fname ).first #firstは配列の[0]
-    img = img.resize_to_fit(50, 996)
-    img.write("#{fname}_decreasedpi.jpg")
-    self.count("#{fname}_decreasedpi.jpg")
+      img = Magick::Image.read( fname ).first #firstは配列の[0]
+      img = img.resize_to_fit(50, 996)
+      img.write("#{fname}_decreasedpi.jpg")
+      self.count("#{fname}_decreasedpi.jpg")
     end
   end
 
@@ -38,7 +51,9 @@ module Domino
 
   def self.count(fname)
     img = Magick::Image.read( fname ).first #firstは配列の[0]
+    =begin
     domino_black = Magick::Pixel.new(45*256,47*256,63*256)
+    =end
     domino_white = Magick::Pixel.new(195*256,226*256,252*256)
     domino_red = Magick::Pixel.new(228*256,99*256,111*256)
     domino_blue = Magick::Pixel.new(9*256,117*256,197*256)
@@ -47,11 +62,12 @@ module Domino
     domino_orange = Magick::Pixel.new(254*256,141*256,97*256)
     domino_pink = Magick::Pixel.new(232*256,160*256,212*256)
     domino_violet = Magick::Pixel.new(82*256,6*256,85*256)
+
     for y in 0..img.columns-1 do
       for x in 0..img.rows-1 do
         tmp = self.close_to_domino(img.pixel_color(x,y).red/256,img.pixel_color(x,y).green/256,img.pixel_color(x,y).green/256)
         if tmp == "black" then 
-          img.pixel_color(x,y,domino_black)
+          img.pixel_color(x,y,DOMINO_BLACK)
         elsif tmp == "white" then
           img.pixel_color(x,y,domino_white)
         elsif tmp == "red" then
@@ -73,6 +89,7 @@ module Domino
     end
     img.write("#{ARGV[0]}_replace.jpg")
   end
+
 end
 
 #Domino.decreasedpi
