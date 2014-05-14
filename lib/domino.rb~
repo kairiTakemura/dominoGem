@@ -94,4 +94,7 @@ module Domino
 end
 
 Domino.decreasedpi
+#Domino.count
+
+
 
