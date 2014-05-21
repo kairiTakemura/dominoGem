@@ -39,7 +39,8 @@ module Domino
     dis_violet = Math.sqrt((DOMINO_VIOLET.red-red)**2+(DOMINO_VIOLET.green-green)**2+(DOMINO_VIOLET.blue-blue)**2)
 
     dis = {"black" => dis_black,"white" => dis_white,"red" => dis_red,"blue" => dis_blue,"yellow" => dis_yellow,"green" => dis_green,"orange" => dis_orange,"pink" => dis_pink,"violet" => dis_violet}#Store several distance for hash.
-    return ( diff.min { |a, b| a[1] <=> b[1] } )[0]#Return minimal value's key.
+    puts ( dis.min { |a, b| a[1] <=> b[1] } )
+    return ( dis.min { |a, b| a[1] <=> b[1] } )[0]#Return minimal value's key.
   end
 
   def self.count(fname)
