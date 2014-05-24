@@ -54,16 +54,17 @@ module Domino
     corange = 0
     cpink = 0
     cviolet = 0
-    for y in 0..img.columns-1 do
-      for x in 0..img.rows-1 do
+    for y in 0..img.rows-1 do
+      for x in 0..img.columns-1 do
         tmp = self.close_to_domino(img.pixel_color(x,y).red,img.pixel_color(x,y).green,img.pixel_color(x,y).blue)
-        if tmp == "black" then 
+        if tmp == "black" then #case文にする
           img.pixel_color(x,y,DOMINO_BLACK)
           cblack += 1#Rubyではインクリメント演算子を使用できない！
         elsif tmp == "white" then
           img.pixel_color(x,y,DOMINO_WHITE)
           cwhite += 1
           puts cwhite
+          puts
         elsif tmp == "red" then
           img.pixel_color(x,y,DOMINO_RED)
           cred += 1
