@@ -21,7 +21,7 @@ module Domino
   def self.decrease_dpi#Decrease row dpi to 50. 
     for fname in ARGV do
       img = Magick::Image.read( fname ).first #firstは配列の[0]
-      img = img.resize_to_fit(30, 996)
+      img = img.resize_to_fit(50, 996)
       img.write("#{fname}_decreasedpi.jpg")
       self.count("#{fname}_decreasedpi.jpg")
     end
@@ -45,31 +45,59 @@ module Domino
 
   def self.count(fname)
     img = Magick::Image.read( fname ).first #firstは配列の[0]
+    cblack = 0 #Count for black domino.
+    cwhite = 0
+    cred = 0
+    cblue = 0
+    cyellow = 0
+    cgreen = 0
+    corange = 0
+    cpink = 0
+    cviolet = 0
     for y in 0..img.columns-1 do
       for x in 0..img.rows-1 do
         tmp = self.close_to_domino(img.pixel_color(x,y).red,img.pixel_color(x,y).green,img.pixel_color(x,y).blue)
         if tmp == "black" then 
           img.pixel_color(x,y,DOMINO_BLACK)
+          cblack += 1#Rubyではインクリメント演算子を使用できない！
         elsif tmp == "white" then
           img.pixel_color(x,y,DOMINO_WHITE)
+          cwhite += 1
+          puts cwhite
         elsif tmp == "red" then
           img.pixel_color(x,y,DOMINO_RED)
+          cred += 1
         elsif tmp == "blue" then
           img.pixel_color(x,y,DOMINO_BLUE)
+          cblue += 1
         elsif tmp == "yellow" then
           img.pixel_color(x,y,DOMINO_YELLOW)
+          cyellow += 1
         elsif tmp == "green" then
           img.pixel_color(x,y,DOMINO_GREEN)
+          cgreen += 1
         elsif tmp == "orange" then
           img.pixel_color(x,y,DOMINO_ORANGE)
+          corange += 1
         elsif tmp == "pink" then
           img.pixel_color(x,y,DOMINO_PINK)
+          cpink += 1
         elsif tmp == "violet" then
           img.pixel_color(x,y,DOMINO_VIOLET)
+          cviolet += 1
         end
       end
     end
     img.write("#{ARGV[0]}_replace.jpg")
+    puts "Black : #{cblack}"
+    puts "White : #{cwhite}"
+    puts "Red : #{cred}"
+    puts "Blue : #{cblue}"
+    puts "Yellow : #{cyellow}"
+    puts "Green : #{cgreen}"
+    puts "Orange : #{corange}"
+    puts "Pink : #{cpink}"
+    puts "Violet : #{cviolet}"
   end
 end
 
