@@ -19,7 +19,7 @@ module Domino
 
   def self.decrease_dpi#Decrease row dpi to 50. 
     for fname in ARGV do
-      img = Magick::Image.read( fname ).first #firstは配列の[0]
+      img = Magick::Image.read(fname).first #firstは配列の[0]
       img = img.resize_to_fit(50, )
       img.write("#{fname}_decreasedpi.jpg")
       self.count("#{fname}_decreasedpi.jpg")
@@ -95,6 +95,10 @@ module Domino
     puts "Orange : #{corange}"
     puts "Pink : #{cpink}"
     puts "Violet : #{cviolet}"
+  end
+
+  def self.size(fname)
+    
   end
 end
 
