@@ -17,12 +17,18 @@ module Domino
   DOMINO_PINK = Magick::Pixel.new(232*256,160*256,212*256)
   DOMINO_VIOLET = Magick::Pixel.new(82*256,6*256,85*256)
 
+  #Domino height,length and width.
+  DOMINO_HEIGHT = 46e-3
+  DOMINO_LENGTH = 23e-3
+  DOMINO_WIDTH = 8e-3
+
   def self.decrease_dpi#Decrease row dpi to 50. 
     for fname in ARGV do
       img = Magick::Image.read(fname).first #firstは配列の[0]
       img = img.resize_to_fit(50, )
       img.write("#{fname}_decreasedpi.jpg")
       self.count("#{fname}_decreasedpi.jpg")
+      self.size("#{fname}_decreasedpi.jpg")
     end
   end
 
@@ -97,8 +103,10 @@ module Domino
     puts "Violet : #{cviolet}"
   end
 
-  def self.size(fname)
-    
+  def self.size(fname)#Expression area that required to put domino.
+    img = Magick::Image.read( fname ).first
+    puts "Length : #{(DOMINO_HEIGHT/2+DOMINO_WIDTH)*img.columns}"
+    puts "Width : #{(DOMINO_LENGTH+DOMINO_WIDTH)*img.rows}"
   end
 end
 
