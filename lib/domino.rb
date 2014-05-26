@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-#しゃばん
 #require "domino/version"
 require 'rubygems'
 require 'RMagick'
@@ -7,7 +6,7 @@ require 'RMagick'
 
 module Domino
 
-  #Each domino RGB.
+  #Each domino RGB value.
   DOMINO_BLACK = Magick::Pixel.new(45*256,47*256,63*256)
   DOMINO_WHITE = Magick::Pixel.new(195*256,226*256,252*256)
   DOMINO_RED = Magick::Pixel.new(228*256,99*256,111*256)
@@ -21,7 +20,7 @@ module Domino
   def self.decrease_dpi#Decrease row dpi to 50. 
     for fname in ARGV do
       img = Magick::Image.read( fname ).first #firstは配列の[0]
-      img = img.resize_to_fit(50, 996)
+      img = img.resize_to_fit(50, )
       img.write("#{fname}_decreasedpi.jpg")
       self.count("#{fname}_decreasedpi.jpg")
     end
@@ -39,7 +38,6 @@ module Domino
     dis_violet = Math.sqrt((DOMINO_VIOLET.red-red)**2+(DOMINO_VIOLET.green-green)**2+(DOMINO_VIOLET.blue-blue)**2)
 
     dis = {"black" => dis_black,"white" => dis_white,"red" => dis_red,"blue" => dis_blue,"yellow" => dis_yellow,"green" => dis_green,"orange" => dis_orange,"pink" => dis_pink,"violet" => dis_violet}#Store several distance for hash.
-    puts ( dis.min { |a, b| a[1] <=> b[1] } )
     return ( dis.min { |a, b| a[1] <=> b[1] } )[0]#Return minimal value's key.
   end
 
@@ -56,34 +54,32 @@ module Domino
     cviolet = 0
     for y in 0..img.rows-1 do
       for x in 0..img.columns-1 do
-        tmp = self.close_to_domino(img.pixel_color(x,y).red,img.pixel_color(x,y).green,img.pixel_color(x,y).blue)
-        if tmp == "black" then #case文にする
+        case self.close_to_domino(img.pixel_color(x,y).red,img.pixel_color(x,y).green,img.pixel_color(x,y).blue)
+        when "Black" then
           img.pixel_color(x,y,DOMINO_BLACK)
-          cblack += 1#Rubyではインクリメント演算子を使用できない！
-        elsif tmp == "white" then
+          cblack += 1
+        when "white" then
           img.pixel_color(x,y,DOMINO_WHITE)
           cwhite += 1
-          puts cwhite
-          puts
-        elsif tmp == "red" then
+        when "red" then
           img.pixel_color(x,y,DOMINO_RED)
           cred += 1
-        elsif tmp == "blue" then
+        when "blue" then
           img.pixel_color(x,y,DOMINO_BLUE)
           cblue += 1
-        elsif tmp == "yellow" then
+        when "yellow" then
           img.pixel_color(x,y,DOMINO_YELLOW)
           cyellow += 1
-        elsif tmp == "green" then
+        when "green" then
           img.pixel_color(x,y,DOMINO_GREEN)
           cgreen += 1
-        elsif tmp == "orange" then
+        when "orange" then
           img.pixel_color(x,y,DOMINO_ORANGE)
           corange += 1
-        elsif tmp == "pink" then
+        when "pink" then
           img.pixel_color(x,y,DOMINO_PINK)
           cpink += 1
-        elsif tmp == "violet" then
+        when "violet" then
           img.pixel_color(x,y,DOMINO_VIOLET)
           cviolet += 1
         end
