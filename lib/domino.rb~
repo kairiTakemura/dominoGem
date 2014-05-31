@@ -17,6 +17,8 @@ module Domino
   DOMINO_PINK = Magick::Pixel.new(232*256,160*256,212*256)
   DOMINO_VIOLET = Magick::Pixel.new(82*256,6*256,85*256)
 
+  DOMINO = [DOMINO_BLACK,DOMINO_WHITE,DOMINO_RED,DOMINO_BLUE,DOMINO_YELLOW,DOMINO_GREEN,DOMINO_ORANGE,DOMINO_PINK,DOMINO_VIOLET]
+
   #Domino height,length and width.
   DOMINO_HEIGHT = 46e-3
   DOMINO_LENGTH = 23e-3
@@ -32,19 +34,17 @@ module Domino
     end
   end
 
-  def self.close_to_domino(red,green,blue)#Return which color domino close to pixel. 
-    dis_black = Math.sqrt((DOMINO_BLACK.red-red)**2+(DOMINO_BLACK.green-green)**2+(DOMINO_BLACK.blue-blue)**2)#Calculate the distance between black domino and pixel.
-    dis_white = Math.sqrt((DOMINO_WHITE.red-red)**2+(DOMINO_WHITE.green-green)**2+(DOMINO_WHITE.blue-blue)**2)
-    dis_red = Math.sqrt((DOMINO_RED.red-red)**2+(DOMINO_RED.green-green)**2+(DOMINO_RED.blue-blue)**2)
-    dis_blue = Math.sqrt((DOMINO_BLUE.red-red)**2+(DOMINO_BLUE.green-green)**2+(DOMINO_BLUE.blue-blue)**2)
-    dis_yellow = Math.sqrt((DOMINO_YELLOW.red-red)**2+(DOMINO_YELLOW.green-green)**2+(DOMINO_YELLOW.blue-blue)**2)
-    dis_green = Math.sqrt((DOMINO_GREEN.red-red)**2+(DOMINO_GREEN.green-green)**2+(DOMINO_GREEN.blue-blue)**2)
-    dis_orange = Math.sqrt((DOMINO_ORANGE.red-red)**2+(DOMINO_ORANGE.green-green)**2+(DOMINO_ORANGE.blue-blue)**2)
-    dis_pink = Math.sqrt((DOMINO_PINK.red-red)**2+(DOMINO_PINK.green-green)**2+(DOMINO_PINK.blue-blue)**2)
-    dis_violet = Math.sqrt((DOMINO_VIOLET.red-red)**2+(DOMINO_VIOLET.green-green)**2+(DOMINO_VIOLET.blue-blue)**2)
-
-    dis = {"black" => dis_black,"white" => dis_white,"red" => dis_red,"blue" => dis_blue,"yellow" => dis_yellow,"green" => dis_green,"orange" => dis_orange,"pink" => dis_pink,"violet" => dis_violet}#Store several distance for hash.
-    return ( dis.min { |a, b| a[1] <=> b[1] } )[0]#Return minimal value's key.
+  def self.close_to_domino(pixel_color)#Return which color domino close to pixel. 
+    min = Math.sqrt((DOMINO_BLACK.red-pixel_color.red)**2+(DOMINO_BLACK.green-pixel_color.green)**2+(DOMINO_BLACK.blue-pixel_color.blue)**2)
+    tmp = DOMINO_BLACK
+    for domino in DOMINO do
+      distance = Math.sqrt((domino.red-pixel_color.red)**2+(domino.green-pixel_color.green)**2+(domino.blue-pixel_color.blue)**2)#Calculate the distance between domino and pixel.
+      if distance < min then
+        min = distance
+        tmp = domino
+      end
+    end
+    return tmp #Return minimal.
   end
 
   def self.count(fname)
@@ -60,33 +60,26 @@ module Domino
     cviolet = 0
     for y in 0..img.rows-1 do
       for x in 0..img.columns-1 do
-        case self.close_to_domino(img.pixel_color(x,y).red,img.pixel_color(x,y).green,img.pixel_color(x,y).blue)
-        when "Black" then
-          img.pixel_color(x,y,DOMINO_BLACK)
+        tmp = self.close_to_domino(img.pixel_color(x,y))
+        img.pixel_color(x,y,tmp)
+        case tmp 
+        when DOMINO_BLACK then 
           cblack += 1
-        when "white" then
-          img.pixel_color(x,y,DOMINO_WHITE)
+        when DOMINO_WHITE then 
           cwhite += 1
-        when "red" then
-          img.pixel_color(x,y,DOMINO_RED)
+        when DOMINO_RED then 
           cred += 1
-        when "blue" then
-          img.pixel_color(x,y,DOMINO_BLUE)
+        when DOMINO_BLUE then 
           cblue += 1
-        when "yellow" then
-          img.pixel_color(x,y,DOMINO_YELLOW)
+        when DOMINO_YELLOW then 
           cyellow += 1
-        when "green" then
-          img.pixel_color(x,y,DOMINO_GREEN)
+        when DOMINO_GREEN then 
           cgreen += 1
-        when "orange" then
-          img.pixel_color(x,y,DOMINO_ORANGE)
+        when DOMINO_ORANGE then 
           corange += 1
-        when "pink" then
-          img.pixel_color(x,y,DOMINO_PINK)
+        when DOMINO_PINK then 
           cpink += 1
-        when "violet" then
-          img.pixel_color(x,y,DOMINO_VIOLET)
+        when DOMINO_VIOLET then 
           cviolet += 1
         end
       end
@@ -108,6 +101,11 @@ module Domino
     puts "Length : #{(DOMINO_HEIGHT/2+DOMINO_WIDTH)*img.columns}"
     puts "Width : #{(DOMINO_LENGTH+DOMINO_WIDTH)*img.rows}"
   end
+
+  def self.layout#Output the layout of domino.
+    
+  end
+
 end
 
 Domino.decrease_dpi
