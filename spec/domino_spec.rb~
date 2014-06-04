@@ -1,5 +1,5 @@
 #require 'spec_helper'
-require 'domino'
+require 'Domino'
 
 describe Domino do
   describe '#size' do

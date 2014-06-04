@@ -24,14 +24,12 @@ module Domino
   DOMINO_LENGTH = 23e-3
   DOMINO_WIDTH = 8e-3
 
-  def self.decrease_dpi#Decrease row dpi to 50. 
-    for fname in ARGV do
-      img = Magick::Image.read(fname).first #firstは配列の[0]
-      img = img.resize_to_fit(50, )
-      img.write("#{fname}_decreasedpi.jpg")
-      self.count("#{fname}_decreasedpi.jpg")
-      self.size("#{fname}_decreasedpi.jpg")
-    end
+  def self.decrease_dpi(fname)#Decrease row dpi to 50. 
+    img = Magick::Image.read(fname).first #firstは配列の[0]
+    img = img.resize_to_fit(50, )
+    img.write("#{fname}_decreasedpi.jpg")
+    self.count("#{fname}_decreasedpi.jpg")
+    p self.size("#{fname}_decreasedpi.jpg")
   end
 
   def self.close_to_domino(pixel_color)#Return which color domino close to pixel. 
@@ -48,7 +46,7 @@ module Domino
   end
 
   def self.count(fname)
-    img = Magick::Image.read( fname ).first #firstは配列の[0]
+    img = Magick::Image.read(fname).first #firstは配列の[0]
     cblack = 0 #Count for black domino.
     cwhite = 0
     cred = 0
@@ -97,9 +95,8 @@ module Domino
   end
 
   def self.size(fname)#Expression area that required to put domino.
-    img = Magick::Image.read( fname ).first
-    puts "Length : #{(DOMINO_HEIGHT/2+DOMINO_WIDTH)*img.columns}"
-    puts "Width : #{(DOMINO_LENGTH+DOMINO_WIDTH)*img.rows}"
+    img = Magick::Image.read(fname).first
+    return [(DOMINO_HEIGHT/2+DOMINO_WIDTH)*img.columns,(DOMINO_LENGTH+DOMINO_WIDTH)*img.rows]
   end
 
   def self.layout#Output the layout of domino.
@@ -108,5 +105,5 @@ module Domino
 
 end
 
-Domino.decrease_dpi
+Domino.decrease_dpi(ARGV[0])
 
