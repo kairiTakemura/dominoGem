@@ -6,8 +6,8 @@ require 'domino/version'
 Gem::Specification.new do |spec|
   spec.name          = "domino"
   spec.version       = Domino::VERSION
-  spec.authors       = ["kairi takemura"]
-  spec.email         = ["thinglikeabar@gmail.com"]
+  spec.authors       = ["Kairi Takemura"]
+  spec.email         = ["a1346kt@aiit.ac.jp"]
   spec.summary       = %q{domino simulator}
   spec.description   = %q{domino simulator}
   spec.homepage      = ""
@@ -18,8 +18,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.6"
+  spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rmagick"
+
 end
