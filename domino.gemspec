@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'domino/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "domino"
+  spec.name          = "domino_simulator"
   spec.version       = Domino::VERSION
   spec.authors       = ["Kairi Takemura"]
   spec.email         = ["a1346kt@aiit.ac.jp"]

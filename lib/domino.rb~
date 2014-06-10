@@ -18,18 +18,25 @@ module Domino
   DOMINO_VIOLET = Magick::Pixel.new(82*256,6*256,85*256)
 
   DOMINO = [DOMINO_BLACK,DOMINO_WHITE,DOMINO_RED,DOMINO_BLUE,DOMINO_YELLOW,DOMINO_GREEN,DOMINO_ORANGE,DOMINO_PINK,DOMINO_VIOLET]
-
-=begin
-  COUNT = {DOMINO_BLACK:cblack,DOMINO_WHITE:cwhite,DOMINO_RED:cred,DOMINO_BLUE,DOMINO_YELLOW,DOMINO_GREEN,DOMINO_ORANGE,DOMINO_PINK,DOMINO_VIOLET}
-=end
+  cblack = 0
+  cwhite = 0
+  cred = 0
+  cblue = 0
+  cyellow = 0
+  cgreen = 0
+  corange = 0
+  cpink = 0
+  cviolet = 0
+  count = {DOMINO_BLACK => cblack,DOMINO_WHITE => cwhite,DOMINO_RED => cred,DOMINO_BLUE => cblue,DOMINO_YELLOW => cyellow,DOMINO_GREEN => cgreen,DOMINO_ORANGE => corange,DOMINO_PINK => cpink,DOMINO_VIOLET => cviolet}
 
   #Domino height,length and width.
   DOMINO_HEIGHT = 46e-3
   DOMINO_LENGTH = 23e-3
   DOMINO_WIDTH = 8e-3
 
-  def self.decrease_dpi(fname)#Decrease row dpi to 50. 
-    img = Magick::Image.read(fname).first #firstは配列の[0]
+  #Decrease row dpi to 50.
+  def self.decrease_dpi(fname) 
+    img = Magick::Image.read(fname).first
     img = img.resize_to_fit(50, )
     img.write("#{fname}_decreasedpi.jpg")
     self.count("#{fname}_decreasedpi.jpg")
@@ -37,30 +44,21 @@ module Domino
     puts "width : #{self.size("#{fname}_decreasedpi.jpg")[1]}m"
   end
 
-  def self.close_to_domino(pixel_color)#Return which color domino close to pixel. 
+  #Return which color domino close to pixel. 
+  def self.close_to_domino(pixel_color)
     min = Math.sqrt((DOMINO_BLACK.red-pixel_color.red)**2+(DOMINO_BLACK.green-pixel_color.green)**2+(DOMINO_BLACK.blue-pixel_color.blue)**2)
     tmp = DOMINO_BLACK
     for domino in DOMINO do
-      distance = Math.sqrt((domino.red-pixel_color.red)**2+(domino.green-pixel_color.green)**2+(domino.blue-pixel_color.blue)**2)#Calculate the distance between domino and pixel.
+      distance = Math.sqrt((domino.red-pixel_color.red)**2+(domino.green-pixel_color.green)**2+(domino.blue-pixel_color.blue)**2)
       if distance < min then
         min = distance
         tmp = domino
       end
     end
-    return tmp #Return minimal.
+    return tmp
   end
-
   def self.count(fname)
-    img = Magick::Image.read(fname).first #firstは配列の[0]
-    cblack = 0 #Count for black domino.
-    cwhite = 0
-    cred = 0
-    cblue = 0
-    cyellow = 0
-    cgreen = 0
-    corange = 0
-    cpink = 0
-    cviolet = 0
+    img = Magick::Image.read(fname).first
     for y in 0..img.rows-1 do
       for x in 0..img.columns-1 do
         tmp = self.close_to_domino(img.pixel_color(x,y))
@@ -99,7 +97,8 @@ module Domino
     puts "Violet : #{cviolet}"
   end
 
-  def self.size(fname)#Expression area that required to put domino.
+  #Expression area that required to put domino.
+  def self.size(fname)
     img = Magick::Image.read(fname).first
     return [(DOMINO_HEIGHT/2+DOMINO_WIDTH)*img.columns,(DOMINO_LENGTH+DOMINO_WIDTH)*img.rows]
   end
